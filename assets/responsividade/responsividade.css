@@ -1,0 +1,48 @@
+/* Setas centralizadas verticalmente */
+.custom-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+/* Reposiciona horizontalmente conforme o tamanho da tela */
+@media (min-width: 768px) {
+  .carousel-control-prev.custom-control {
+    left: -40px;
+  }
+  .carousel-control-next.custom-control {
+    right: -40px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .carousel-control-prev.custom-control {
+    left: 10px;
+  }
+  .carousel-control-next.custom-control {
+    right: 10px;
+  }
+}
+
+/* Impede a altura variável entre slides */
+#carouselImoveisDestaque .carousel-inner {
+  min-height: 400px; /* Ajuste conforme seus cards */
+  position: relative;
+}
+
+.card-img-top-sm {
+  height: 150px; /* ou outro valor desejado */
+  object-fit: cover;
+}
+
+
+
+
+
+nav.navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+  }
