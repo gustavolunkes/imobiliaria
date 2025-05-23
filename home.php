@@ -3,25 +3,10 @@ session_start();
 require_once 'includes/db.php';
 include 'includes/header.php';
 
-// Busca imóveis em destaque (limitado a 12)
+// Busca imóveis em destaque
 $stmtDestaque = $pdo->prepare("SELECT * FROM imoveis WHERE destaque = 1 ORDER BY created_at DESC LIMIT 12");
 $stmtDestaque->execute();
 $imoveisDestaque = $stmtDestaque->fetchAll(PDO::FETCH_ASSOC);
-
-// Filtro
-$tipo = $_GET['tipo'] ?? '';
-$sqlTodos = "SELECT * FROM imoveis";
-$params = [];
-
-if (!empty($tipo)) {
-  $sqlTodos .= " WHERE tipo = :tipo";
-  $params[':tipo'] = $tipo;
-}
-
-$sqlTodos .= " ORDER BY created_at DESC";
-$stmtTodos = $pdo->prepare($sqlTodos);
-$stmtTodos->execute($params);
-$imoveis = $stmtTodos->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Carousel de banners -->
@@ -33,13 +18,13 @@ $imoveis = $stmtTodos->fetchAll(PDO::FETCH_ASSOC);
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="assets/img/Clouds-1500x500-Twitter-Header05.jpg" class="d-block w-100" alt="Banner 1">
+      <img src="assets/img/+55 4599999-9999 (1).png" class="d-block w-100" alt="Banner 1">
     </div>
     <div class="carousel-item">
-      <img src="assets/img/Clouds-1500x500-Twitter-Header05.jpg" class="d-block w-100" alt="Banner 2">
+      <img src="assets/img/+55 4599999-9999 (1).png" class="d-block w-100" alt="Banner 2">
     </div>
     <div class="carousel-item">
-      <img src="assets/img/Clouds-1500x500-Twitter-Header05.jpg" class="d-block w-100" alt="Banner 3">
+      <img src="assets/img/+55 4599999-9999 (1).png" class="d-block w-100" alt="Banner 3">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -67,14 +52,16 @@ $imoveis = $stmtTodos->fetchAll(PDO::FETCH_ASSOC);
 
           <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2">Destaque</span>
 
-          <div class="card-body">
-            <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
-            <p class="card-text">
-              <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
-              (<?= ucfirst($imovel['categoria']) ?>)
-            </p>
-            <p class="card-text"><?= ucfirst(htmlspecialchars($imovel['tipo'])) ?></p>
-            <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100">Ver detalhes</a>
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
+              <p class="card-text">
+                <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
+                (<?= ucfirst($imovel['categoria']) ?>)
+              </p>
+              <p class="card-text"><?= ucfirst(htmlspecialchars($imovel['tipo'])) ?></p>
+            </div>
+            <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100 mt-3">Ver detalhes</a>
           </div>
         </div>
       </div>
@@ -82,37 +69,36 @@ $imoveis = $stmtTodos->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </div>
 
-<!-- Todos os imóveis (com filtro e fundo destacado) -->
+<!-- Todos os imóveis com filtro -->
 <div class="py-5 mt-5">
   <div class="container bg-white p-4 rounded-4" style="box-shadow: 0 8px 20px rgba(44, 42, 42, 0.7);">
-    <h2 class="text-center mb-4 display-6 text-dark fw-bold position-relative ">
-    Todos os Imóveis
-</h2>
+    <h2 class="text-center mb-4 display-6 text-dark fw-bold">Todos os Imóveis</h2>
 
     <!-- Filtro -->
-    <form method="GET" class="row g-3 mb-4">
+    <form method="GET" id="filtroForm" class="row g-3 mb-4">
       <div class="col-md-4">
         <label for="tipo" class="form-label">Filtrar por tipo:</label>
         <select name="tipo" id="tipo" class="form-select">
           <option value="">Todos</option>
-          <option value="casa" <?= $tipo === 'casa' ? 'selected' : '' ?>>Casa</option>
-          <option value="apartamento" <?= $tipo === 'apartamento' ? 'selected' : '' ?>>Apartamento</option>
-          <option value="terreno" <?= $tipo === 'terreno' ? 'selected' : '' ?>>Terreno</option>
-          <option value="comercial" <?= $tipo === 'comercial' ? 'selected' : '' ?>>Comercial</option>
+          <option value="casa">Casa</option>
+          <option value="apartamento">Apartamento</option>
+          <option value="terreno">Terreno</option>
+          <option value="comercial">Comercial</option>
         </select>
       </div>
       <div class="col-md-2 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        <button type="submit" class="btn btn-primary w-100 btn-filtro">Filtrar</button>
       </div>
     </form>
 
     <!-- Lista de imóveis -->
-    <div class="row">
-      <?php if (count($imoveis) === 0): ?>
-        <p class="text-center">Nenhum imóvel encontrado com esse filtro.</p>
-      <?php endif; ?>
-
-      <?php foreach ($imoveis as $imovel): ?>
+    <div id="lista-imoveis" class="row">
+      <?php
+      $stmt = $pdo->prepare("SELECT * FROM imoveis ORDER BY created_at DESC");
+      $stmt->execute();
+      $imoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($imoveis as $imovel):
+      ?>
         <div class="col-6 col-md-3 mb-4">
           <div class="card h-100 position-relative">
             <?php if (!empty($imovel['imagem'])): ?>
@@ -121,18 +107,20 @@ $imoveis = $stmtTodos->fetchAll(PDO::FETCH_ASSOC);
               <img src="https://via.placeholder.com/350x250?text=Sem+Imagem" class="card-img-top" alt="Sem imagem">
             <?php endif; ?>
 
-            <?php if (!empty($imovel['destaque']) && $imovel['destaque']): ?>
+            <?php if (!empty($imovel['destaque'])): ?>
               <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2">Destaque</span>
             <?php endif; ?>
 
-            <div class="card-body">
-              <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
-              <p class="card-text">
-                <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
-                (<?= ucfirst($imovel['categoria']) ?>)
-              </p>
-              <p class="card-text"><?= ucfirst(htmlspecialchars($imovel['tipo'])) ?></p>
-              <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100">Ver detalhes</a>
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div>
+                <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
+                <p class="card-text">
+                  <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
+                  (<?= ucfirst($imovel['categoria']) ?>)
+                </p>
+                <p class="card-text"><?= ucfirst(htmlspecialchars($imovel['tipo'])) ?></p>
+              </div>
+              <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100 mt-3">Ver detalhes</a>
             </div>
           </div>
         </div>
@@ -140,4 +128,22 @@ $imoveis = $stmtTodos->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 </div>
+
 <?php include 'includes/footer.php'; ?>
+
+<!-- AJAX Script filtro_imoveis.php -->
+<script>
+document.getElementById('filtroForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const tipo = document.getElementById('tipo').value;
+
+  fetch('filtro_imoveis.php?tipo=' + encodeURIComponent(tipo))
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('lista-imoveis').innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Erro ao carregar imóveis:', error);
+    });
+});
+</script>

@@ -2,6 +2,7 @@
 include 'includes/header.php';
 include 'includes/db.php';
 
+// Lista inicial de imóveis à venda
 $status = 'venda';
 $stmt = $pdo->prepare("SELECT * FROM imoveis WHERE categoria = :categoria ORDER BY created_at DESC");
 $stmt->bindParam(':categoria', $status, PDO::PARAM_STR);
@@ -11,7 +12,26 @@ $imoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container mt-5">
   <h2 class="text-center mb-4">Imóveis à Venda</h2>
-  <div class="row">
+
+  <!-- Filtro por tipo -->
+  <form method="GET" id="filtroVendaForm" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label for="tipo" class="form-label">Filtrar por tipo:</label>
+      <select name="tipo" id="tipo" class="form-select">
+        <option value="">Todos</option>
+        <option value="casa">Casa</option>
+        <option value="apartamento">Apartamento</option>
+        <option value="terreno">Terreno</option>
+        <option value="comercial">Comercial</option>
+      </select>
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+    </div>
+  </form>
+
+  <!-- Lista de imóveis -->
+  <div class="row" id="lista-venda">
     <?php foreach ($imoveis as $imovel): ?>
       <div class="col-6 col-md-3 mb-4">
         <div class="card h-100 position-relative">
@@ -25,16 +45,16 @@ $imoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2">Destaque</span>
           <?php endif; ?>
 
-          <div class="card-body">
-            <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
-            <p class="card-text">
-              <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
-              (<?= ucfirst($imovel['categoria']) ?> - Venda)
-            </p>
-            <p class="card-text">
-              <?= ucfirst(htmlspecialchars($imovel['tipo'])) ?>
-            </p>
-            <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100">Ver detalhes</a>
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
+              <p class="card-text">
+                <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
+                (<?= ucfirst($imovel['categoria']) ?> )
+              </p>
+              <p class="card-text"><?= ucfirst(htmlspecialchars($imovel['tipo'])) ?></p>
+            </div>
+            <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100 mt-3">Ver detalhes</a>
           </div>
         </div>
       </div>
@@ -43,3 +63,20 @@ $imoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <?php include 'includes/footer.php'; ?>
+
+<!-- Script AJAX -->
+<script>
+document.getElementById('filtroVendaForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const tipo = document.getElementById('tipo').value;
+
+  fetch('filtro_venda.php?tipo=' + encodeURIComponent(tipo))
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('lista-venda').innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Erro ao filtrar:', error);
+    });
+});
+</script>

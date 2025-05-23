@@ -22,22 +22,23 @@ $imoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2">Destaque</span>
           <?php endif; ?>
 
-          <div class="card-body">
-            <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
-            <p class="card-text">
-              <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
-              (<?= ucfirst($imovel['categoria']) ?>)
-            </p>
-            <p class="card-text">
-              <?= ucfirst(htmlspecialchars($imovel['tipo'])) ?>
-            </p>
-            <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100">Ver detalhes</a>
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title"><?= htmlspecialchars($imovel['titulo']) ?></h5>
+              <p class="card-text">
+                <strong>R$ <?= number_format($imovel['preco'], 2, ',', '.') ?></strong>
+                (<?= ucfirst($imovel['categoria']) ?>)
+              </p>
+              <p class="card-text">
+                <?= ucfirst(htmlspecialchars($imovel['tipo'])) ?>
+              </p>
+            </div>
+            <a href="detalhes.php?id=<?= $imovel['id'] ?>" class="btn btn-outline-primary w-100 mt-3">Ver detalhes</a>
           </div>
         </div>
       </div>
     <?php endforeach; ?>
   </div>
 </div>
-
 
 <?php include 'includes/footer.php'; ?>
