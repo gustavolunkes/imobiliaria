@@ -16,9 +16,6 @@ include 'includes/header.php';
       <p>
         Contamos com uma equipe de corretores experientes e preparados, que atuam com total dedicação para garantir a melhor experiência em cada etapa do processo. Nosso portfólio é diversificado, incluindo imóveis residenciais, comerciais, lançamentos e oportunidades exclusivas, sempre atualizados conforme as tendências e demandas do mercado. 
       </p>
-      <p>
-        Seja para morar, investir ou empreender, estamos prontos para ajudar você a encontrar o imóvel ideal. Mais do que uma imobiliária, somos parceiros na realização dos seus projetos de vida.
-      </p>
       </div>
     <div class="col-md-6">
       <img

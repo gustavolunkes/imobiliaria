@@ -10,8 +10,13 @@
 </head>
 <body>
 
-<!-- Menu de navegação -->
-<!-- Menu de navegação moderno -->
+<!-- para funcionar a busca -->
+<?php
+$busca = $_GET['busca'] ?? '';
+?>
+
+
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg shadow-sm" style="position: sticky; top: 0; background-color:rgb(31, 41, 53); z-index: 100;">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center gap-2 text-white" href="home.php" style="font-weight: bold; font-size: 1.25rem;">
@@ -21,6 +26,7 @@
     <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link text-white fw-semibold px-3" href="home.php">Home</a></li>
@@ -37,8 +43,16 @@
         <li class="nav-item"><a class="nav-link text-white fw-semibold px-3" href="servicos.php">Serviços</a></li>
         <li class="nav-item"><a class="nav-link text-white fw-semibold px-3" href="contato.php">Contato</a></li>
       </ul>
+
+      <!-- Barra de pesquisa -->
+      <form class="d-flex ms-lg-3 mt-3 mt-lg-0" role="search" action="imoveis.php" method="GET">
+        <input class="form-control form-control-sm me-2" type="search" name="busca" placeholder="Buscar imóveis" aria-label="Buscar"
+         value="<?= htmlspecialchars($busca) ?>">
+        <button class="btn btn-outline-light btn-sm me-2" type="submit">Buscar</button>
+        <?php if (!empty($busca)): ?>
+        <a href="imoveis.php" class="btn btn-outline-secondary btn-sm">Limpar</a>
+        <?php endif; ?>
+      </form>
     </div>
   </div>
 </nav>
-
-

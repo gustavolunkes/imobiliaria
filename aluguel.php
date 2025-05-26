@@ -10,8 +10,9 @@ $stmt->execute();
 $imoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="container mt-5">
-  <h2 class="text-center mb-4">Imóveis para Alugar</h2>
+<div class="py-5 mt-5">
+  <div class="container bg-white p-4 rounded-4" style="box-shadow: 0 8px 20px rgba(44, 42, 42, 0.7);">
+    <h2 class="text-center mb-4 display-6 text-dark fw-bold">Para Alugar</h2>
 
   <!-- Filtro por tipo -->
   <form method="GET" id="filtroAluguelForm" class="row g-3 mb-4">
@@ -59,6 +60,7 @@ $imoveis = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
       </div>
     <?php endforeach; ?>
+  </div>
   </div>
 </div>
 

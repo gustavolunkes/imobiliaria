@@ -33,6 +33,8 @@ $imagensAdicionais = $stmtImagens->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
+<a href="imoveis.php" class="btn btn-secondary d-btn-voltar">Voltar</a>
+
 <div class="container mt-5">
     <h1><?= htmlspecialchars($imovel['titulo']) ?></h1>
 
@@ -69,9 +71,8 @@ $imagensAdicionais = $stmtImagens->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="mt-4 d-flex gap-2">
               <a href="galeria.php?id=<?= $id ?>" class="btn btn-primary">Ver Galeria</a>
-              <a href="imoveis.php" class="btn btn-secondary">Voltar</a>
+              
             </div>
-
         </div>
     </div>
 
@@ -116,8 +117,8 @@ $imagensAdicionais = $stmtImagens->fetchAll(PDO::FETCH_ASSOC);
         </div>
       </div>
     </div>
-
 </div>
+<?php include 'includes/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
