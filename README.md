@@ -103,7 +103,7 @@ IMOBILIARIA/
 
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/seu-usuario/imobiliaria.git
+   git clone https://github.com/gustavolunkes/imobiliaria.git
    ```
 
 2. **Coloque o projeto na pasta do XAMPP**:
