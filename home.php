@@ -2,6 +2,9 @@
 session_start();
 require_once 'includes/db.php';
 include 'includes/header.php';
+include 'capturarDadosCliente.php';
+
+
 
 // Busca imóveis em destaque
 $stmtDestaque = $pdo->prepare("SELECT * FROM imoveis WHERE destaque = 1 ORDER BY created_at DESC LIMIT 12");
@@ -39,8 +42,8 @@ $imoveisDestaque = $stmtDestaque->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Imóveis em destaque -->
 <div class="container mt-4">
-  <h2 class="text-center mb-4">Imóveis em Destaque</h2>
-  <div class="row">
+  <h2 class="text-center mb-4" >Imóveis em Destaque</h2><hr>
+  <div class="row" style="margin-top: 60px">
     <?php foreach ($imoveisDestaque as $imovel): ?>
       <div class="col-6 col-md-3 mb-4">
         <div class="card h-100 position-relative">
@@ -70,6 +73,7 @@ $imoveisDestaque = $stmtDestaque->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <!-- Todos os imóveis com filtro -->
+
 <div class="py-5 mt-5">
   <div class="container bg-white p-4 rounded-4" style="box-shadow: 0 8px 20px rgba(44, 42, 42, 0.7);">
     <h2 class="text-center mb-4 display-6 text-dark fw-bold">Todos os Imóveis</h2>
@@ -87,7 +91,7 @@ $imoveisDestaque = $stmtDestaque->fetchAll(PDO::FETCH_ASSOC);
         </select>
       </div>
       <div class="col-md-2 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100 btn-filtro">Filtrar</button>
+        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
       </div>
     </form>
 

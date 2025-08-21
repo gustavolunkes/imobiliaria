@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'imobiliaria'; 
+$dbname = 'imobiliaria_db'; 
 $username = 'root';
 $password = ''; // Senha vazia por padrão no XAMPP
 
